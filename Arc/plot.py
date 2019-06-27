@@ -5,7 +5,18 @@ import matplotlib.patheffects as pe
 
 def plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard):
     """
-    Plots Curves for things and stuff
+    plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard)
+    ######################################################
+    
+    Displays Arc Plot Diagram. This consists of a series of arcs overlayed on MIDI data presented horizontally.
+    
+    Parameters:
+        nmat (pandas.df): A Note Matrix that contains pitch, timing, and velocity information for a series of notes.
+        nmatRCE (pandas.df): A version of the Note Matrix which has each element reduced to a binary value.
+        onsets (list): A list of values that describes when each note would begin in the piece.
+        offsets (list): A list of values that describes when each note would end in the piece.
+        segind (list): A list of lists of values that describe the occurences of each pattern found in the piece.
+        segcard (list): A list that describes how many notes should be in each pattern.
     """
     
     _midiplot(onsets,offsets,pitch)
@@ -65,6 +76,21 @@ def plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard):
         _arc(x=x,y=pitchmean,r=rad,linewidthstart=linewidthstart,linewidthend=linewidthend)
 
 def _arc(x,y,r,nsegments=100,coloralpha='r',linewidthstart=5,linewidthend=10):
+    """
+    _arc(x,y,r,nsegments=100,coloralpha='r',linewidthstart=5,linewidthend=10)
+    #########################################################################
+    
+    Draws an arc from one point to another.
+    
+    Parameters:
+        x (float): The time value the arc will start at.
+        y (float): The pitch value the arc will start at.
+        r (float): The radius of the arc.
+        nsegments (int): The number of line segments that make up the arc.
+        coloralpha (str): The color of the line segments.
+        linewidthstart (int): the width of each line segment at the beginning.
+        linewidthend (int): the width of each line segment at the end.
+    """
     th=np.arange(0,np.pi,np.pi/100)
     xunit=r * np.cos(th) + x;
     yunit=r * np.sin(th) + y;

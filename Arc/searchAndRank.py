@@ -1,4 +1,4 @@
-import midi2nmat.py
+import midi2nmat
 import numpy as np
 
 def _make_ContCM(arr, deg1, deg2 = None):

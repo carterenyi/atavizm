@@ -1,9 +1,6 @@
 import pandas as pd
 import mido
 
-import pandas as pd
-import mido
-
 def midi2nmat(path):
     """Returns a Note Matrix from a given MIDI files"""
     
