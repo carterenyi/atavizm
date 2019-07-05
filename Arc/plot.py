@@ -3,9 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as pe
 
-def plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard):
+def plot(nmat,segind,segcard):
     """
-    plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard)
+    plot(nmat,segind,segcard)
     ######################################################
     
     Displays Arc Plot Diagram. This consists of a series of arcs overlayed on MIDI data presented horizontally.
@@ -18,6 +18,10 @@ def plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard):
         segind (list): A list of lists of values that describe the occurences of each pattern found in the piece.
         segcard (list): A list that describes how many notes should be in each pattern.
     """
+    
+    onsets = nmat['Time']
+    offsets = onsets + nmat['Duration']
+    pitch = nmat['Pitch']
     
     _midiplot(onsets,offsets,pitch)
 
@@ -45,24 +49,24 @@ def plot(nmat,nmatRCE,onsets,offsets,pitch,segind,segcard):
     #         simind=[];
     #     end
     #       ind
-    origxstart = nmatRCE.iloc[segind[0],0]
+    origxstart = nmat.iloc[segind[0],0]
     card=segcard
-    origxend=nmatRCE.iloc[(segind[0] + card - 1),0] + nmatRCE.iloc[(segind[0] + card - 1),1]
+    origxend=nmat.iloc[(segind[0] + card - 1),0] + nmat.iloc[(segind[0] + card - 1),1]
     origwidth=origxend - origxstart
     origx=(origwidth) / 2 + origxstart
     linewidthstart= origwidth #need to normalize to pixel length
-    origpitchmin=min(nmatRCE.iloc[segind[0]:(segind[0] + card - 1),2]) - 2
+    origpitchmin=min(nmat.iloc[segind[0]:(segind[0] + card - 1),2]) - 2
     colornoalpha=cmap1(colornum)
     colornum=colornum + 1
     
     for j in range(1,len(ind)):
         noteInd = ind[j]-1
-        compxstart=nmatRCE.iloc[noteInd,0]
-        compxend=nmatRCE.iloc[noteInd + (card - 1),0] + nmatRCE.iloc[noteInd + (card - 1),1]
+        compxstart=nmat.iloc[noteInd,0]
+        compxend=nmat.iloc[noteInd + (card - 1),0] + nmat.iloc[noteInd + (card - 1),1]
         compwidth=compxend - compxstart
         compx=(compwidth) / 2 + compxstart
         linewidthend= compwidth #need to normalize to pixel length
-        comppitchmin=min(nmatRCE.iloc[noteInd:noteInd + (card - 1),2]) - 2
+        comppitchmin=min(nmat.iloc[noteInd:noteInd + (card - 1),2]) - 2
         rad=(compx - origx) / 2
         rads.append(rad)
         x=rad + origx
