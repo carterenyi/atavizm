@@ -20,25 +20,32 @@ def plot(nmat,segind,segcard):
     """
     
     onsets = nmat['Time']
-    offsets = onsets + nmat['Duration']
+#     offsets = onsets + nmat['Duration']
     pitch = nmat['Pitch']
+    offsets = [sum(x) for x in zip(onsets, nmat['Duration'])]
     
     _midiplot(onsets,offsets,pitch)
 
     colornum=1
     #cmap1=jet(len(segcard))
     #cmap1 = plt.cm.get_cmap('jet')
-    pitchmean=nmat['Pitch (C4=60)'].mean()
+    pitchmax=nmat['Pitch'].max()
+    pitchmean=nmat['Pitch'].mean()
+    pitchmean=(pitchmax+pitchmean)/2
 
-    #segind=[1,72,161,244,264,382,517,726]
     framelabels = ["Onset in Beats", "Durations in Beats", "Pitch (C4=60)"]
-    #segcard=20
     rads = [1]
     # for i in range(0,len(segind)-1):
-    try:
-        ind=segind
-    finally:
-        pass
+    #try:
+    temp=onsets[segind]
+    temp=temp.sort_values()
+    #SortInd = temp.head() 
+    SortInd=list(temp.index.values) 
+    #r = r.sort_values(by=["cov"], ascending=False).reset_index(drop=True)
+    ind=SortInd
+    segind=ind
+    #finally:
+    #    pass
     #     try
     #         try
     #             simind=r(i).simind;
@@ -49,24 +56,26 @@ def plot(nmat,segind,segcard):
     #         simind=[];
     #     end
     #       ind
-    origxstart = nmat.iloc[segind[0],0]
+    origxstart = onsets[segind[0]]
     card=segcard
-    origxend=nmat.iloc[(segind[0] + card - 1),0] + nmat.iloc[(segind[0] + card - 1),1]
+    origxend=offsets[segind[0]+card-1]
     origwidth=origxend - origxstart
     origx=(origwidth) / 2 + origxstart
     linewidthstart= origwidth #need to normalize to pixel length
-    origpitchmin=min(nmat.iloc[segind[0]:(segind[0] + card - 1),2]) - 2
-    colornoalpha=cmap1(colornum)
+    origpitchmin=min(pitch[segind[0]:(segind[0] + card - 1)]) - 2
+    colornoalpha=[colornum]
     colornum=colornum + 1
     
     for j in range(1,len(ind)):
-        noteInd = ind[j]-1
-        compxstart=nmat.iloc[noteInd,0]
-        compxend=nmat.iloc[noteInd + (card - 1),0] + nmat.iloc[noteInd + (card - 1),1]
+        #noteInd = ind[j]
+        #compxstart=nmat.iloc[noteInd,0]
+        compxstart = onsets[ind[j]]
+        #compxend=nmat.iloc[noteInd + (card - 1),0] + nmat.iloc[noteInd + (card - 1),1]
+        compxend = offsets[ind[j]+card-1]
         compwidth=compxend - compxstart
         compx=(compwidth) / 2 + compxstart
         linewidthend= compwidth #need to normalize to pixel length
-        comppitchmin=min(nmat.iloc[noteInd:noteInd + (card - 1),2]) - 2
+        comppitchmin=min(pitch[ind[j]:ind[j] + (card - 1)]) - 2
         rad=(compx - origx) / 2
         rads.append(rad)
         x=rad + origx
@@ -95,20 +104,21 @@ def _arc(x,y,r,nsegments=100,coloralpha='r',linewidthstart=5,linewidthend=10):
         linewidthstart (int): the width of each line segment at the beginning.
         linewidthend (int): the width of each line segment at the end.
     """
-    th=np.arange(0,np.pi,np.pi/100)
+    th=np.arange(0,np.pi,np.pi/200)
     xunit=r * np.cos(th) + x;
     yunit=r * np.sin(th) + y;
     linewidthincrement=(linewidthstart-linewidthend)/len(xunit);
 
     plt.figure(1)
+    
     for i in range(2,len(th)):
-        plt.plot([xunit[i-1],xunit[i]], [yunit[i-1],yunit[i]],coloralpha,linewidth = linewidthend+i*linewidthincrement)
+        plt.plot([xunit[i-1],xunit[i]], [yunit[i-1],yunit[i]],'b',linewidth = 10*(linewidthend+i*linewidthincrement), zorder=0, alpha=0.05)
         
 def _midiplot(onsets,offsets,pitch):
     plt.figure(figsize=(20,10))
     
     for i in range(0,len(onsets)):
-        plt.plot([onsets[i],offsets[i]], [pitch[i],pitch[i]], 'g', lw=2, path_effects=[pe.Stroke(linewidth=5, foreground='g'), pe.Normal()])
-
+        plt.plot([onsets[i],offsets[i]], [pitch[i],pitch[i]], 'k', lw=2, path_effects=[pe.Stroke(linewidth=2, foreground='k'), pe.Normal()], zorder=5)
+        
     plt.xlabel("Beats")
     plt.ylabel("Pitch (C4=60)")
