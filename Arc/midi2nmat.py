@@ -28,7 +28,7 @@ def midi2nmat(path):
 
         note_on = midiframe.loc[(midiframe["Velocity"] != 0) & (midiframe["Type"] == "note_on")]
         note_off = midiframe.loc[(midiframe["Velocity"] == 0) & (midiframe["Type"] == "note_on")]
-        newdex = range(0,len(note_off))
+        # newdex = range(0,len(note_off))
 
         
 

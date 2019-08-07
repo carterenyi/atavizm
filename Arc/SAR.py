@@ -42,7 +42,7 @@ def SAR_Contour(nmat, s_type=3, cmin=5, cmax=10, degrees=2):
     s = []
 
     for i in range(0,len(r)):
-        inds=[];
+        inds=[]
         for j in range(0,len(r["segind"].iloc[i])):
             a=r["segind"].iloc[i][j]
             b=r["segind"].iloc[i][j]+r["card"].iloc[i]-1

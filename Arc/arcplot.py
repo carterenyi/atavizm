@@ -20,7 +20,6 @@ def plot(nmat,segind,segcard):
     """
     
     onsets = nmat['Time']
-#     offsets = onsets + nmat['Duration']
     pitch = nmat['Pitch']
     offsets = [sum(x) for x in zip(onsets, nmat['Duration'])]
     
@@ -33,7 +32,7 @@ def plot(nmat,segind,segcard):
     pitchmean=nmat['Pitch'].mean()
     pitchmean=(pitchmax+pitchmean)/2
 
-    framelabels = ["Onset in Beats", "Durations in Beats", "Pitch (C4=60)"]
+    # framelabels = ["Onset in Beats", "Durations in Beats", "Pitch (C4=60)"]
     rads = [1]
     # for i in range(0,len(segind)-1):
     #try:
@@ -61,9 +60,9 @@ def plot(nmat,segind,segcard):
     origxend=offsets[segind[0]+card-1]
     origwidth=origxend - origxstart
     origx=(origwidth) / 2 + origxstart
-    linewidthstart= origwidth #need to normalize to pixel length
-    origpitchmin=min(pitch[segind[0]:(segind[0] + card - 1)]) - 2
-    colornoalpha=[colornum]
+    # linewidthstart= origwidth ### need to normalize to pixel length
+    # origpitchmin=min(pitch[segind[0]:(segind[0] + card - 1)]) - 2
+    # colornoalpha=[colornum]
     colornum=colornum + 1
     
     for j in range(1,len(ind)):
@@ -74,19 +73,18 @@ def plot(nmat,segind,segcard):
         compxend = offsets[ind[j]+card-1]
         compwidth=compxend - compxstart
         compx=(compwidth) / 2 + compxstart
-        linewidthend= compwidth #need to normalize to pixel length
-        comppitchmin=min(pitch[ind[j]:ind[j] + (card - 1)]) - 2
+        # linewidthend= compwidth ### need to normalize to pixel length
+        #comppitchmin=min(pitch[ind[j]:ind[j] + (card - 1)]) - 2
         rad=(compx - origx) / 2
         rads.append(rad)
         x=rad + origx
-        nsegments=100
-        linewidth=np.dot(card,3)
+        #linewidth=np.dot(card,3)
         
-        if segcard:
-            colornoalpha=[0,0,1]
+        # if segcard:
+        #     colornoalpha=[0,0,1]
             
-        coloralpha=colornoalpha.append(0.5)
-        _arc(x=x,y=pitchmean,r=rad,linewidthstart=linewidthstart,linewidthend=linewidthend)
+        # coloralpha=colornoalpha.append(0.5)
+        _arc(x=x,y=pitchmean,r=rad)
 
 def _arc(x,y,r,nsegments=100,coloralpha='r',linewidthstart=5,linewidthend=10):
     """
@@ -105,9 +103,9 @@ def _arc(x,y,r,nsegments=100,coloralpha='r',linewidthstart=5,linewidthend=10):
         linewidthend (int): the width of each line segment at the end.
     """
     th=np.arange(0,np.pi,np.pi/200)
-    xunit=r * np.cos(th) + x;
-    yunit=r * np.sin(th) + y;
-    linewidthincrement=(linewidthstart-linewidthend)/len(xunit);
+    xunit=r * np.cos(th) + x
+    yunit=r * np.sin(th) + y
+    linewidthincrement=(linewidthstart-linewidthend)/len(xunit)
 
     plt.figure(1)
     
