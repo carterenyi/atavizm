@@ -6,6 +6,9 @@ In 2019, ATAVizM was the basis of a course module at southeastern colleges and u
 Download the Desktop Version from the Atlanta University Center’s RADAR or try out our developing web app hosted by Heroku.
 
 Resources:
+
 Institutional Repository:	[https://radar.auctr.edu/atavizm](url)
+
 Website: [https://www.atavizm.org/](url)
+
 Heroku Web App:	[https://atavizm-dev.herokuapp.com/ATAVizM_App](url)
